@@ -1,0 +1,26 @@
+# 真菌 ITS 项目配置。原始数据：rawData/raw.{样本}.1.fq.gz / raw.{样本}.2.fq.gz
+PROJECT_NAME="真菌ITS"
+ORGANISM="真菌"
+MARKER="ITS"
+REGION="ITS1F-ITS2"
+PRIMER_F_NAME="ITS1F"
+PRIMER_R_NAME="ITS2"
+PRIMER_F="CTTGGTCATTTAGAGGAAGTAA"
+PRIMER_F_EXTRA=""
+PRIMER_R="GCTGCGTTCTTCATCGATGC"
+THREADS=8
+MIN_OVERLAP=8
+MAX_OVERLAP=300
+FLASH_X=0.6
+CUTADAPT_E=0.45
+CUTADAPT_O=8
+
+_CFG_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+_ROOT=$(cd "$_CFG_DIR/.." && pwd)
+REF_SEQS="$_ROOT/database/unite/unite-seqs.qza"
+REF_TAX="$_ROOT/database/unite/unite-tax.qza"
+
+KEEP_DOMAIN="Fungi"
+RUN_FUNGAL_FUNCTION=1
+RUN_PICRUST2=0
+WRITE_PAPER=1

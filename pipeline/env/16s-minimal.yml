@@ -1,0 +1,25 @@
+# 16S 流程最小环境：质控/合并/去嵌合体 + QIIME2 DADA2 + 可选分类
+name: 16s
+channels:
+  - https://packages.qiime2.org/qiime2/2025.10/amplicon/released
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.10
+  # 10.0.0 需要 Python 3.11 的 typing.Self，在 3.10 下会导致 qiime 无法启动
+  - flufl.lock=8.2.0
+  - qiime2=2025.10.1
+  - q2cli=2025.10.1
+  - q2-types=2025.10.0
+  - q2-dada2=2025.10.0
+  - q2-feature-table=2025.10.0
+  - q2-feature-classifier=2025.10.0
+  - q2-vsearch=2025.10.0
+  - q2templates=2025.10.0
+  - cutadapt=5.1
+  - vsearch=2.22.1
+  - biom-format=2.1.16
+  - trimmomatic
+  - flash
+  - mafft
+  - fasttree

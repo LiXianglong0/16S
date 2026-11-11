@@ -1,0 +1,58 @@
+扩增子分析程序（可交付程序包）
+================================
+
+本包是「分析程序 + 参考库 + 示例原始数据」，不含某一次分析的中间结果
+（qiime2/、work/、报告等需自行运行生成）。
+
+目录结构
+--------
+16S扩增子分析程序/
+├── 使用说明.txt
+├── README.md
+├── pipeline/                 分析脚本与报告模板
+├── database/
+│   ├── silva138/             16S SILVA 138（古菌/细菌）
+│   ├── unite/                ITS UNITE（真菌）
+│   ├── funguild/             FUNGuild
+│   └── fungaltraits/         FungalTraits
+├── 古菌项目/                 含 rawData 示例
+├── 细菌项目/                 含 rawData 示例
+└── 真菌项目/                 含 rawData 示例（ITS）
+
+环境（WSL + Miniconda）
+----------------------
+1. 安装 Miniconda 到 WSL 的 ~/miniconda3
+2. 进入本包后执行：
+     bash pipeline/setup_env.sh
+     conda activate 16s
+
+如何运行
+--------
+  conda activate 16s
+  bash 古菌项目/run_16s.sh
+  bash 细菌项目/run_16s.sh
+  bash 真菌项目/run_16s.sh
+
+只重做注释与丰度：
+  bash 古菌项目/run_16s.sh taxonomy
+
+结果目录：各项目下 01.ASV.tax/、valid/、amplicon-ngs.report.html 等。
+真菌额外产出：01.ASV.tax/04.fungal_function/
+
+可选：AI 论文草稿
+----------------
+1. 复制 pipeline/zhipu.env.example → pipeline/zhipu.env，填入智谱 API Key
+2. 全流程默认生成 项目/paper/manuscript.md
+3. 不需要时：WRITE_PAPER=0 bash 真菌项目/run_16s.sh
+
+GitHub 注意
+-----------
+- 单文件勿超过 100MB（本包参考库与 fq.gz 均低于该限）
+- 不要提交含真实 Key 的 pipeline/zhipu.env
+- 若仓库过大，可用 Git LFS 或分卷；推送前建议先 git status / du -sh
+
+注意
+----
+- 须在 WSL 中运行。
+- 勿把原始数据放到 pipeline/ 根下；放在各项目 rawData/。
+- 真菌数据必须是 ITS 扩增子，不能用 16S FASTQ。

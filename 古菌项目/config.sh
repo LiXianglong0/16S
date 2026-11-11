@@ -1,0 +1,25 @@
+# 古菌 16S 项目配置。原始数据：rawData/raw.{样本}.1.fq.gz / raw.{样本}.2.fq.gz
+PROJECT_NAME="古菌16S"
+ORGANISM="古菌"
+MARKER="16S"
+REGION="Arch519F-Arch915R"
+PRIMER_F_NAME="Arch519F"
+PRIMER_R_NAME="Arch915R"
+PRIMER_F="CAGCMGCCGCGGTAA"
+PRIMER_F_EXTRA=""
+PRIMER_R="GTGCTCCCCCGCCAATTCCT"
+THREADS=8
+MIN_OVERLAP=8
+MAX_OVERLAP=300
+FLASH_X=0.6
+CUTADAPT_E=0.45
+CUTADAPT_O=8
+
+_CFG_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+_ROOT=$(cd "$_CFG_DIR/.." && pwd)
+REF_SEQS="$_ROOT/database/silva138/silva-138-99-seqs.qza"
+REF_TAX="$_ROOT/database/silva138/silva-138-99-tax.qza"
+
+KEEP_DOMAIN="Archaea"
+RUN_PICRUST2=0
+WRITE_PAPER=1
