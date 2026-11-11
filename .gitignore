@@ -1,5 +1,7 @@
 # 本地备份 / 中间结果，不上传
 bak/
+.idea/
+*.iml
 database/fungaltraits/FungalTraits_genera.tsv
 database/fungaltraits/README.txt
 database/funguild/FUNGuild.txt

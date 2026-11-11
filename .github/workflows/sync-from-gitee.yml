@@ -1,0 +1,65 @@
+# 以 Gitee 为准，定时/手动同步到本 GitHub 仓库
+name: Sync from Gitee
+
+on:
+  schedule:
+    # 每小时（UTC）；国内约对应整点后 8 小时
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: sync-from-gitee
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout GitHub repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch Gitee and push to GitHub main
+        env:
+          GITEE_REPO: ${{ secrets.GITEE_REPO }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GITEE_REPO:-}" ]; then
+            echo "请在 GitHub Secrets 中设置 GITEE_REPO，例如 https://gitee.com/用户名/16S.git"
+            exit 1
+          fi
+
+          # 私有库需要 Token；公开库可不设 GITEE_TOKEN
+          if [ -n "${GITEE_TOKEN:-}" ]; then
+            # 支持 https://gitee.com/user/repo.git
+            AUTH_REPO="$(echo "$GITEE_REPO" | sed "s#https://#https://oauth2:${GITEE_TOKEN}@#")"
+          else
+            AUTH_REPO="$GITEE_REPO"
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git remote remove gitee 2>/dev/null || true
+          git remote add gitee "$AUTH_REPO"
+          git fetch gitee
+
+          # 优先同步 main，其次 master
+          if git show-ref --verify --quiet refs/remotes/gitee/main; then
+            SRC=gitee/main
+          elif git show-ref --verify --quiet refs/remotes/gitee/master; then
+            SRC=gitee/master
+          else
+            echo "Gitee 上未找到 main/master 分支"
+            git branch -r
+            exit 1
+          fi
+
+          git checkout -B main "$SRC"
+          git push origin main
+          echo "已将 $SRC 同步到 origin/main"
